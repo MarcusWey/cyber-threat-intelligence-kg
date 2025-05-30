@@ -19,10 +19,6 @@ venv/
 # Data folder (cloned CTI)
 data/cti/
 
-# Generated graph files
-data/*.owl
-data/*.ttl
-
 # Logs and temporary files
 *.log
 
