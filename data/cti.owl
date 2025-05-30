@@ -1,0 +1,156 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:owl="http://www.w3.org/2002/07/owl#"
+         xml:base="http://tswgroup41.org/cti"
+         xmlns="http://tswgroup41.org/cti#"
+         xmlns:swrl="http://www.w3.org/2003/11/swrl#">
+
+<owl:Ontology rdf:about="http://tswgroup41.org/cti"/>
+
+<owl:ObjectProperty rdf:about="#hasTactic">
+  <rdfs:domain rdf:resource="#Technique"/>
+  <rdfs:range rdf:resource="#Tactic"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#usesTechnique">
+  <rdfs:domain rdf:resource="#Campaign"/>
+  <rdfs:domain rdf:resource="#ThreatActor"/>
+  <rdfs:range rdf:resource="#Technique"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#hasIndicator">
+  <rdfs:domain rdf:resource="#Campaign"/>
+  <rdfs:range rdf:resource="#Indicator"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#linkedTo">
+  <rdfs:domain rdf:resource="#Campaign"/>
+  <rdfs:range rdf:resource="#Campaign"/>
+</owl:ObjectProperty>
+
+<owl:DatatypeProperty rdf:about="#name">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+</owl:DatatypeProperty>
+
+<owl:DatatypeProperty rdf:about="#description"/>
+
+<owl:DatatypeProperty rdf:about="#hasATTCKID">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+</owl:DatatypeProperty>
+
+<owl:Class rdf:about="#ThreatActor">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+</owl:Class>
+
+<owl:Class rdf:about="#Campaign">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+</owl:Class>
+
+<owl:Class rdf:about="#Technique">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+</owl:Class>
+
+<owl:Class rdf:about="#Tactic">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+</owl:Class>
+
+<owl:Class rdf:about="#Indicator">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+</owl:Class>
+
+<owl:Class rdf:about="#Vulnerability">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+</owl:Class>
+
+<owl:Class rdf:about="#Tool">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+</owl:Class>
+
+<swrl:Variable rdf:about="urn:swrl#c1"/>
+
+<swrl:Variable rdf:about="urn:swrl#c2"/>
+
+<swrl:Variable rdf:about="urn:swrl#i"/>
+
+<swrl:Imp>
+  <swrl:body>
+    <rdf:Description>
+      <rdf:first>
+        <swrl:ClassAtom>
+          <swrl:classPredicate rdf:resource="#Campaign"/>
+          <swrl:argument1 rdf:resource="urn:swrl#c1"/>
+        </swrl:ClassAtom>
+      </rdf:first>
+      <rdf:rest>
+        <rdf:Description>
+          <rdf:first>
+            <swrl:ClassAtom>
+              <swrl:classPredicate rdf:resource="#Campaign"/>
+              <swrl:argument1 rdf:resource="urn:swrl#c2"/>
+            </swrl:ClassAtom>
+          </rdf:first>
+          <rdf:rest>
+            <rdf:Description>
+              <rdf:first>
+                <swrl:ClassAtom>
+                  <swrl:classPredicate rdf:resource="#Indicator"/>
+                  <swrl:argument1 rdf:resource="urn:swrl#i"/>
+                </swrl:ClassAtom>
+              </rdf:first>
+              <rdf:rest>
+                <rdf:Description>
+                  <rdf:first>
+                    <swrl:IndividualPropertyAtom>
+                      <swrl:propertyPredicate rdf:resource="#hasIndicator"/>
+                      <swrl:argument1 rdf:resource="urn:swrl#c1"/>
+                      <swrl:argument2 rdf:resource="urn:swrl#i"/>
+                    </swrl:IndividualPropertyAtom>
+                  </rdf:first>
+                  <rdf:rest>
+                    <rdf:Description>
+                      <rdf:first>
+                        <swrl:IndividualPropertyAtom>
+                          <swrl:propertyPredicate rdf:resource="#hasIndicator"/>
+                          <swrl:argument1 rdf:resource="urn:swrl#c2"/>
+                          <swrl:argument2 rdf:resource="urn:swrl#i"/>
+                        </swrl:IndividualPropertyAtom>
+                      </rdf:first>
+                      <rdf:rest>
+                        <rdf:Description>
+                          <rdf:first>
+                            <swrl:DifferentIndividualsAtom>
+                              <swrl:argument1 rdf:resource="urn:swrl#c1"/>
+                              <swrl:argument2 rdf:resource="urn:swrl#c2"/>
+                            </swrl:DifferentIndividualsAtom>
+                          </rdf:first>
+                          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                        </rdf:Description>
+                      </rdf:rest>
+                    </rdf:Description>
+                  </rdf:rest>
+                </rdf:Description>
+              </rdf:rest>
+            </rdf:Description>
+          </rdf:rest>
+        </rdf:Description>
+      </rdf:rest>
+    </rdf:Description>
+  </swrl:body>
+  <swrl:head>
+    <rdf:Description>
+      <rdf:first>
+        <swrl:IndividualPropertyAtom>
+          <swrl:propertyPredicate rdf:resource="#linkedTo"/>
+          <swrl:argument1 rdf:resource="urn:swrl#c1"/>
+          <swrl:argument2 rdf:resource="urn:swrl#c2"/>
+        </swrl:IndividualPropertyAtom>
+      </rdf:first>
+      <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+    </rdf:Description>
+  </swrl:head>
+</swrl:Imp>
+
+
+</rdf:RDF>
