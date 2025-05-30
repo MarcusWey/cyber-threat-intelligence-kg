@@ -1,4 +1,4 @@
-const endpoint = "http://localhost:5000";
+const endpoint = "https://cyber-threat-intelligence-kg.onrender.com";
 
 // --- Load Actors (with URI) ---
 function loadActors() {
