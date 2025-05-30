@@ -5,4 +5,4 @@ flask
 flask-cors 
 requests 
 pandas
-os
+pyparsing==2.9.4
