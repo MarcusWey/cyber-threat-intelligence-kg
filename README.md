@@ -86,7 +86,7 @@ For environment setup, refer to `environment.yml` for Conda dependencies.
 ---
 
 ## Architecture Overview
-
+```
 +-------------------+      +-----------------+      +-----------------------+      +-----------------+
 |  Raw CTI/STIX     |      |  Data Ingestion |      |  OWL Ontology         |      |  Reasoning      |
 |  JSON Data        +-----> |  ingest.py      +----->|  cti.owl / ontology.py+----->|  OWL RL (reasoning.py)
@@ -103,6 +103,8 @@ For environment setup, refer to `environment.yml` for Conda dependencies.
                                                                 |  index.html / js/graph.js    |
                                                                 +------------------------------+
 
+
+```
 ---
 
 **Acknowledgements:**  
