@@ -1,0 +1,15 @@
+name: swt
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+    - rdflib
+    - owlready2
+    - owlrl
+    - flask
+    - flask-cors
+    - requests
+    - pandas
+  

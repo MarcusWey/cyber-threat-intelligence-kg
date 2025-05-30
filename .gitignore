@@ -1,0 +1,31 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.so
+
+# Virtual environments
+env/
+venv/
+.venv/
+.conda/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# IDE settings
+.vscode/
+.idea/
+
+# Data folder (cloned CTI)
+data/cti/
+
+# Generated graph files
+data/*.owl
+data/*.ttl
+
+# Logs and temporary files
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,6 @@
+rdflib 
+owlready2 
+owlrl 
+flask 
+flask-cors 
+requests pandas

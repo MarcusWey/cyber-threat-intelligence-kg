@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cyber Threat Intelligence Knowledge Graph</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script defer src="js/graph.js"></script>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #f8fafb;
+      margin: 0;
+      color: #1a1a1a;
+    }
+    h1 {
+      text-align: center;
+      margin-top: 20px;
+      margin-bottom: 0.2em;
+      font-size: 2em;
+      color: #1565c0;
+    }
+    #tabs {
+      display: flex;
+      justify-content: center;
+      margin: 30px 0 20px 0;
+      gap: 16px;
+    }
+    .tab-btn {
+      padding: 12px 28px;
+      border: none;
+      border-radius: 25px;
+      background: #e3ecf8;
+      font-size: 1.15em;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background .2s;
+      color: #1565c0;
+    }
+    .tab-btn.active, .tab-btn:hover {
+      background: #1565c0;
+      color: #fff;
+    }
+    #main-controls {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 42px;
+      margin-bottom: 20px;
+    }
+    .controls {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 4px 18px #d7e3f6bb;
+      padding: 30px 38px;
+      display: none;
+      flex-direction: column;
+      gap: 22px;
+      min-width: 320px;
+      align-items: center;
+      animation: fadein .4s;
+    }
+    .controls.active { display: flex; }
+    label { font-weight: 500; font-size: 1.1em; }
+    select, button {
+      font-size: 1.07em;
+      padding: 8px 16px;
+      border-radius: 7px;
+      border: 1px solid #b3c3d7;
+      margin-left: 12px;
+    }
+    button {
+      background: #2196f3;
+      color: #fff;
+      font-weight: 500;
+      border: none;
+      margin-left: 0;
+      margin-top: 8px;
+      cursor: pointer;
+      transition: background .18s;
+    }
+    button:hover { background: #1976d2; }
+    #main-graph-area {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      margin: 0 0 30px 0;
+      gap: 36px;
+    }
+    #svg-container {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 2px 12px #d7e3f644;
+      padding: 22px;
+    }
+    svg {
+      width: 690px;
+      height: 520px;
+      background: #f1f8fe;
+      border-radius: 12px;
+      box-shadow: 0 2px 14px #a9c6e322;
+      display: block;
+      margin: 0;
+    }
+    .legend, .sidebar {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 2px 12px #d7e3f622;
+      padding: 20px 20px 13px 20px;
+      font-size: 1em;
+      margin-top: 14px;
+      width: 280px;
+    }
+    .legend span {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      margin-right: 8px;
+      margin-bottom: -3px;
+    }
+    .red { background: #e51c23; }
+    .green { background: #2e7d32; }
+    .blue { background: #2196f3; }
+    .purple { background: #9c27b0; }
+    #top-technique-list {
+      list-style: none;
+      padding-left: 0;
+      margin: 18px 0 0 0;
+      font-size: 1.1em;
+    }
+    #top-technique-list li {
+      margin-bottom: 9px;
+    }
+    .tooltip {
+      position: absolute;
+      padding: 10px 20px;
+      background: #fff;
+      border: 1.5px solid #2196f3;
+      border-radius: 10px;
+      color: #0a1a35;
+      pointer-events: none;
+      font-size: 1.07em;
+      font-weight: 500;
+      z-index: 999;
+      box-shadow: 0 2px 8px #2196f399;
+      visibility: hidden;
+      transition: all .1s;
+    }
+    #loading {
+      display: none;
+      text-align: center;
+      margin-top: 40px;
+      font-size: 1.3em;
+      color: #2196f3;
+      font-weight: 500;
+    }
+    
+    @keyframes fadein {
+      from { opacity: 0; transform: translateY(40px);}
+      to   { opacity: 1; transform: none;}
+    }
+    @media (max-width: 1100px) {
+      #main-graph-area { flex-direction: column; align-items: center;}
+      #svg-container { width: 98vw; max-width: 730px; }
+      svg { width: 97vw; min-width: 340px; }
+    }
+    @media (max-width: 850px) {
+      #main-controls { flex-direction: column; align-items: center;}
+      .legend, .sidebar { width: 96vw; max-width: 370px;}
+    }
+  </style>
+</head>
+<body>
+  <h1>Cyber Threat Intelligence Knowledge Graph</h1>
+  <div id="tabs">
+    <button class="tab-btn active" id="tab-actor">Actor-centric</button>
+    <button class="tab-btn" id="tab-campaign">Campaign-centric</button>
+    <button class="tab-btn" id="tab-technique">Top Techniques</button>
+  </div>
+
+  <div id="main-controls">
+    <div class="controls active" id="controls-actor">
+      <label for="actor-dropdown">Threat Actor/Group</label>
+      <select id="actor-dropdown"></select>
+      <button id="draw-actor-btn">Show Profile</button>
+      <div style="font-size:0.97em;color:#666;margin-top:7px;">
+        Select a group (e.g. "FIN6" or "Wizard Spider") to see their attack techniques and tools.
+      </div>
+    </div>
+    <div class="controls" id="controls-campaign">
+      <label for="campaign-dropdown">Campaign</label>
+      <select id="campaign-dropdown"></select>
+      <button id="draw-campaign-btn">Show Profile</button>
+      <div style="font-size:0.97em;color:#666;margin-top:7px;">
+        Select a campaign to visualize its attack methods and tooling.
+      </div>
+    </div>
+    <div class="controls" id="controls-technique">
+      <button id="load-top-techniques-btn" style="margin-top:10px;">Show Top 5 Techniques</button>
+      <ul id="top-technique-list"></ul>
+      <div style="font-size:0.97em;color:#666;margin-top:8px;">
+        Click any technique to see all groups and campaigns using it.
+      </div>
+    </div>
+  </div>
+  <div id="main-graph-area">
+    <div id="svg-container">
+      <svg></svg>
+      <div id="loading">Loading...</div>
+    </div>
+    <div>
+      <div class="legend">
+        <div><span class="red"></span>Threat Actor/Group</div>
+        <div><span class="green"></span>Campaign</div>
+        <div><span class="blue"></span>Technique</div>
+        <div><span class="purple"></span>Tool/Malware</div>
+      </div>
+      <div class="sidebar" style="margin-top:22px;">
+        <strong>How to use:</strong>
+        <ul style="padding-left:18px;margin-top:8px;">
+          <li>Pick a <b>group</b> or <b>campaign</b> and click "Show Profile" for an interactive network view.</li>
+          <li>Or, go to <b>Top Techniques</b> to see the most used attack methods.</li>
+          <li>Click or hover on nodes for details.</li>
+        </ul>
+        <div style="margin-top:10px;color:#466;">
+          This demo translates complex MITRE ATT&CK data into simple stories for students and analysts.<br>
+          <span style="font-size:0.95em;">(Data: <a href="https://attack.mitre.org/" target="_blank">MITRE ATT&CK</a>)</span>
+        </div>
+      </div>
+    </div>
+    <div class="tooltip"></div>
+  </div>
+</body>
+</html>
